@@ -40,7 +40,7 @@ contract CrowdFunding {
         mapping(address => bool) voters;
     }
     // to store all the request from this contract
-    mapping(uint256 => Request) public request;
+    mapping(uint256 => Request) public requests;
     //  number of request on this contract
     uint256 public numRequests;
 
@@ -128,8 +128,7 @@ contract CrowdFunding {
 
         // now we will create new Request 'newRequest'
         // because we are using mapping inside struct we have to use storage
-        Request storage newRequest = request[numRequests];
-
+        Request storage newRequest = requests[numRequests];
         numRequests++;
 
         // now we will assign the value to new Request
@@ -138,5 +137,31 @@ contract CrowdFunding {
         newRequest.value = _value;
         newRequest.completed = false;
         newRequest.noOfVoters = 0;
+    }
+
+    // now we will vote the request through contributors
+    function voteRequest(uint256 _requestNo) public {
+        // _requestNo: which request you want to vote
+
+        // does voting person is contributor of this contract or not:
+        require(
+            contributors[msg.sender] > 0,
+            "You must be a contributor to vote"
+        );
+
+        Request storage thisRequest = requests[_requestNo];
+
+        // does contributor already voted or not
+        require(
+            thisRequest.voters[msg.sender] == false,
+            "You have already voted"
+        );
+
+        // is request is already completed
+        require(thisRequest.completed == false, "Request is completed");
+
+        // now we will add new voter to the request
+        thisRequest.voters[msg.sender] = true;
+        thisRequest.noOfVoters++;
     }
 }

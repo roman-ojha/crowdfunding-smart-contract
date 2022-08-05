@@ -23,4 +23,16 @@ contract CrowdFunding {
 
     // No. of Contributors
     uint256 public noOfContributors;
+
+    constructor(uint256 _target, uint256 _deadline) {
+        // while deploying this smart contract manager will set 'target' and 'deadline' and some other required field
+        target = _target;
+        deadline = block.timestamp + _deadline;
+        // timestamp : in unix terms
+        // if we have deadline of 1 hour then:
+        // _deadline = 1 * 60 * 60
+        // <deployed_time> + _deadline
+        minimumContribution = 100 wei;
+        manager = msg.sender;
+    }
 }

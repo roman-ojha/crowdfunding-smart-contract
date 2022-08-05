@@ -35,4 +35,26 @@ contract CrowdFunding {
         minimumContribution = 100 wei;
         manager = msg.sender;
     }
+
+    function sendEth() public payable {
+        // this function will help to send eth by contributors
+
+        // contributors need to send ether under the deadline date
+        require(block.timestamp < deadline, "Deadline had passed");
+
+        // Minimum eth condition
+        require(
+            msg.value >= minimumContribution,
+            "Minimum Contribution is not met"
+        );
+
+        if (contributors[msg.sender] == 0) {
+            // If contributor has not contributed on this contract yet and just contributed now
+
+            noOfContributors++;
+        }
+        // contributor can contribute multiple times
+        contributors[msg.sender] += msg.value;
+        raisedAmount += msg.value;
+    }
 }

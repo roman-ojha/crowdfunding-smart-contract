@@ -149,6 +149,7 @@ contract CrowdFunding {
             "You must be a contributor to vote"
         );
 
+        // create instance of Request
         Request storage thisRequest = requests[_requestNo];
 
         // does contributor already voted or not
@@ -163,5 +164,34 @@ contract CrowdFunding {
         // now we will add new voter to the request
         thisRequest.voters[msg.sender] = true;
         thisRequest.noOfVoters++;
+    }
+
+    // now we will pay to the recipient for which request had been opened
+    function makePayment(uint256 _requestNo) public onlyManager {
+        // only manager can pay to recipient
+
+        // does raised amount is greater then target
+        require(raisedAmount >= target);
+
+        // create instance Request
+        Request storage thisRequest = requests[_requestNo];
+
+        // does we already pay to that Request
+        require(
+            thisRequest.completed == false,
+            "The request has been completed"
+        );
+
+        // noOfVoters > 50% of noOfContributors
+        require(
+            thisRequest.noOfVoters > noOfContributors / 2,
+            "Majority does not support"
+        );
+
+        // now we will transfer the request amount to recipient
+        thisRequest.recipient.transfer(thisRequest.value);
+
+        // now this request is complete
+        thisRequest.completed = true;
     }
 }

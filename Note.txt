@@ -1,0 +1,15 @@
+*) CrowdFunding:
+    -> One company take money from crowd and then use for charity, project, business
+    *) Smart Contract Design:
+        -> Contributors:
+            -> contributors transfer ether to Smart contract rather then manager
+        -> Manager:
+            -> Target:
+                -> how much money is need to do project
+            -> Deadline:
+                -> how much time do we have for that project
+            -> minContribution:
+                -> minimum money required to contribution
+            -> manager need to take a permission from the contribution if he/she want to get those contributed ether from start contract
+        -> if < 50% of contributors allow only then manager can be able to get those ether
+        -> if the targeted money didn't get fulfilled on a Deadline then contributors will get there money back

@@ -24,6 +24,26 @@ contract CrowdFunding {
     // No. of Contributors
     uint256 public noOfContributors;
 
+    // structure for Request, where manager will request to extract ether from contract
+    struct Request {
+        // why you are requesting
+        string description;
+        // whom you want to give eth
+        address payable recipient;
+        // how much you want to give
+        uint256 value;
+        // is request completed
+        bool completed;
+        // how much contributor voted
+        uint256 noOfVoters;
+        // did contributors approved or not
+        mapping(address => bool) voters;
+    }
+    // to store all the request from this contract
+    mapping(uint256 => Request) public request;
+    //  number of request on this contract
+    uint256 public numRequests;
+
     constructor(uint256 _target, uint256 _deadline) {
         // while deploying this smart contract manager will set 'target' and 'deadline' and some other required field
         target = _target;
@@ -86,6 +106,10 @@ contract CrowdFunding {
         user.transfer(contributors[msg.sender]);
 
         // now contributor value will become 0
-        contributors[msg.sender] = 0;
+        // contributors[msg.sender] = 0;
+        // now we will delete contributor
+        delete contributors[msg.sender];
     }
+
+    //
 }

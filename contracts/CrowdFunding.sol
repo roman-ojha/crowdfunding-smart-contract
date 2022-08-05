@@ -57,4 +57,35 @@ contract CrowdFunding {
         contributors[msg.sender] += msg.value;
         raisedAmount += msg.value;
     }
+
+    function getContractBalance() public view returns (uint256) {
+        // return contract balance
+        return address(this).balance;
+    }
+
+    function refund() public {
+        // if target did not get met on deadline then contributor will get refund
+
+        // target should not get reached and deadline is cross condition:
+        require(
+            block.timestamp > deadline && raisedAmount < target,
+            "target is fulfilled so can't get refund"
+        );
+
+        // if someone try to get refund but have on contributed condition
+        require(
+            contributors[msg.sender] > 0,
+            "You have not contributed. so, can't get refund"
+        );
+
+        // now if condition get match then we will refund contributor
+        address payable user = payable(msg.sender);
+        // so firstly we have to make msg.sender payable
+
+        // now send the same amount that contributor contributed
+        user.transfer(contributors[msg.sender]);
+
+        // now contributor value will become 0
+        contributors[msg.sender] = 0;
+    }
 }

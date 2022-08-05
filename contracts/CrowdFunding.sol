@@ -111,5 +111,32 @@ contract CrowdFunding {
         delete contributors[msg.sender];
     }
 
-    //
+    // now we will create request which is only be able to access by manager
+    // because only manager can request it means that first we have to make modifier
+    modifier onlyManager() {
+        require(msg.sender == manager, "Only manager can request");
+        _;
+    }
+
+    function createRequest(
+        string memory _description,
+        address _recipient,
+        uint256 _value
+    ) public onlyManager {
+        // now we will take required argument to create request
+        // and we will add 'onlyManager' modifier because only a manger can call this function
+
+        // now we will create new Request 'newRequest'
+        // because we are using mapping inside struct we have to use storage
+        Request storage newRequest = request[numRequests];
+
+        numRequests++;
+
+        // now we will assign the value to new Request
+        newRequest.description = _description;
+        newRequest.recipient = payable(_recipient);
+        newRequest.value = _value;
+        newRequest.completed = false;
+        newRequest.noOfVoters = 0;
+    }
 }
